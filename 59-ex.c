@@ -23,8 +23,6 @@ int main(){
 	outtextrect(230,335,330,415,"楚\t河");
 	outtextrect(470,335,530,415,"汉\t界");
 
-	
-
 	getch();
 	closegraph();
 	return 0;
