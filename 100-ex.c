@@ -18,8 +18,9 @@ int main(){
 
 	printf("输入5个学生的信息：\n学号，姓名，Java成绩，数学成绩，金融学成绩 \n");
 	for(i=0;i<5;i++){
-		scanf("%d,%s,%d,%d,%d",&stu[i].id,stu[i].name,&stu[i].java,&stu[i].math,&stu[i].finance);
-		ava = (float)(stu[i].java+stu[i].math+stu[i].finance)/3;
+		//scanf函数不能回车，不能逗号
+		scanf("%d %s %d %d %d",&(stu[i].id),stu[i].name,&(stu[i].java),&(stu[i].math),&(stu[i].finance));
+		ava = (stu[i].java+stu[i].math+stu[i].finance)/3;
 		stu[i].avarge = ava;
 	}
 
@@ -30,7 +31,7 @@ int main(){
 
 	for(i=0;i<5;i++){
 		//fputs(stu[i],fp);
-		fprintf(fp,"%d %s %3d %3d %3d %3d\n",stu[i].id,stu[i].name,stu[i].java,stu[i].math,stu[i].finance,stu[i].avarge);
+		fprintf(fp,"%d %s %d %d %d %f\n",stu[i].id,stu[i].name,stu[i].java,stu[i].math,stu[i].finance,stu[i].avarge);
 	}
 	fclose(fp);
 	return 0;
