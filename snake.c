@@ -60,18 +60,6 @@ void init_map(char map[ROW+1][LINE+1]){
 		map[0][i] = '+';
 		map[ROW][i] = '+';
 	}
-	/*
-	for(i=0;i<ROW+1;i++){
-		for(j=0;j<LINE+1;j++){
-			if(map[i][j] != 0){
-				printf("%c",map[i][j]);
-			}else{
-				printf(" ");
-			}
-		}
-		printf("\n");
-	}
-	*/
 }
 	
 struct Snake *init_snake(char map[ROW+1][LINE+1]){
@@ -103,14 +91,6 @@ struct Snake *init_snake(char map[ROW+1][LINE+1]){
 		}
 		m = m->next;
 	}
-	/*
-	while(snake->next != NULL){
-		printf("%d ",snake->next->x);
-		printf("%d ",snake->next->y);
-		snake = snake->next;
-	}
-	printf("\n");
-	*/
 	return snake;
 }
 
@@ -136,11 +116,6 @@ struct Snake *get_head(struct Snake *p){
 	head->direct = direct;
 	head->next = NULL;
 
-	/*
-	printf("%d ",head->x);
-	printf("%d ",head->y);
-	printf("\n");
-	*/
 	return head;
 }
 
@@ -178,21 +153,12 @@ void create_food(char map[ROW+1][LINE+1],struct Snake *p){
 		}
 		m = m->next;
 	}
-	/*
-	while(food->next != NULL){
-		printf("%d ",food->next->x);
-		printf("%d ",food->next->y);
-		food = food->next;
-	}
-	*/
-	//return food;
 }
 
 void draw(char map[ROW+1][LINE+1],struct Snake *p){
 	int i,j,x,y;
-	struct Snake *snake;//,*food;
+	struct Snake *snake;
 	snake = p;
-	//food = q;
 
 	while(snake->next != NULL){
 		x = snake->next->x;
@@ -253,11 +219,11 @@ int hit_wall(char map[ROW+1][LINE+1],struct Snake *p){
 }
 
 void move(char map[ROW+1][LINE+1],struct Snake *p){
-	struct Snake *head,*snake,*m;//,*food;
+	struct Snake *head,*snake,*m;
 	int direct,x,y;
 	char head_direct;
 	snake = p;
-	//food = q;
+
 	head = get_head(snake);
 
 	while(1){
@@ -277,7 +243,6 @@ void move(char map[ROW+1][LINE+1],struct Snake *p){
 			}
 		}
 
-		printf("%d\n",direct);
 		if(direct == U){
 			head->x = x-1;
 		}else if(direct == D){
@@ -289,8 +254,7 @@ void move(char map[ROW+1][LINE+1],struct Snake *p){
 		}else{
 			continue;
 		}
-		printf("%d %d %d %c\n",p->next->x,p->next->y,p->next->val,p->next->direct);
-		printf("%d %d %d %c\n",head->x,head->y,head->val,head->direct);
+
 		if(bite_self(map,head) || hit_wall(map,head)){
 			printf("game over!");
 			return;
@@ -316,7 +280,7 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 			snake = snake->next;
 		}
 		head->val = (head->val) +1;
-		// printf("%d\n",head->val);
+
 		x = head->x;
 		y = head->y;					
 		val = head->val;
@@ -324,13 +288,7 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 
 		snake->next = head;
 		snake->next->next = NULL;
-/*
-		snake->next->x = x;
-		snake->next->y = y;
-		snake->next->val = val;
-		snake->next->direct = direct;
-		snake->next->next = NULL;
-*/		
+		
 		map[x][y] = 'o';
 		create_food(map,p);
 	}else{
@@ -342,24 +300,18 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 		if(snake->next->next == NULL){
 			snake->next = NULL;
 		}else{
-			printf("%d\n",snake->next->val);
 			snake->next = n;//删除第一个节点
-			printf("%d\n",snake->next->val);
 
-		// while(p->next != NULL){
-	 // 		printf("%d\n",p->next->val);
-	 // 	}
+			while(snake->next != NULL){
+				x = snake->next->x;
+				y = snake->next->y;
+				val = (snake->next->val) -1;
+				snake->next->val = val;
+				map[x][y] = 'o';
+				snake = snake->next;
+			}
 		}
 
-
-		//m = p;
-		while(snake->next != NULL){
-			x = snake->next->x;
-			y = snake->next->y;
-			val = (snake->next->val) -1;
-			snake->next->val = val;
-			map[x][y] = 'o';
-		}
 		snake->next = head;
 		snake->next->next = NULL;
 		x = head->x;
@@ -367,9 +319,6 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 		map[x][y] = 'o';
 	}
 
-	 // while(p->next != NULL){
-	 // 	printf("%d %d %d %c",p->next->x,p->next->y,p->next->val,p->next->direct);
-	 // }
 	return p;
 }
 
@@ -379,27 +328,6 @@ int main(){
 	char map[ROW+1][LINE+1];
 	int i,j;
 
-	/*//初始化地图
-	void init_map(char map[ROW+1][LINE+1]);
-	//初始化蛇身
-	struct Snake *init_snake();
-	//获取蛇头
-	struct Snake *get_head(struct Snake *p);
-	//初始化食物
-	void create_food(char map[ROW+1][LINE+1],struct Snake *p);
-	//画出整个界面
-	void draw(char map[ROW+1][LINE+1],struct Snake *p);
-	//蛇开始移动
-	void move(char map[ROW+1][LINE+1],struct Snake *p);
-	//移动蛇
-	struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h);
-	//是否吃到食物
-	int eat_food(char map[ROW+1][LINE+1],struct Snake *p);
-	//是否咬到自己
-	int bite_self(char map[ROW+1][LINE+1],struct Snake *p);
-	//是否撞墙
-	int hit_wall(char map[ROW+1][LINE+1],struct Snake *p);
-*/
 	memset(map,0,sizeof(map)); 
 	init_map(map);
 	snake = init_snake(map);
