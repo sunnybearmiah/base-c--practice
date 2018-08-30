@@ -34,9 +34,9 @@ struct Snake *init_snake();
 //获取蛇头
 struct Snake *get_head(struct Snake *p);
 //初始化食物
-void create_food(char map[ROW+1][LINE+1],struct Snake *p);
+void create_food(char map[ROW+1][LINE+1]);
 //画出整个界面
-void draw(char map[ROW+1][LINE+1],struct Snake *p);
+void draw(char map[ROW+1][LINE+1]);
 //蛇开始移动
 void move(char map[ROW+1][LINE+1],struct Snake *p);
 //移动蛇
@@ -119,13 +119,13 @@ struct Snake *get_head(struct Snake *p){
 	return head;
 }
 
-void create_food(char map[ROW+1][LINE+1],struct Snake *p){
-	struct Snake *food,*q,*f,*m;
+void create_food(char map[ROW+1][LINE+1]){
+	struct Snake *food,*f,*m;
 	int x=0,y=0;
 
 	food = (struct Snake *)malloc(sizeof(struct Snake));
 	food->next = NULL;
-	q = p;
+	// q = p;
 	f = food;
 	srand(time(NULL));
 
@@ -155,20 +155,8 @@ void create_food(char map[ROW+1][LINE+1],struct Snake *p){
 	}
 }
 
-void draw(char map[ROW+1][LINE+1],struct Snake *p){
-	int i,j,x,y;
-	struct Snake *snake;
-	snake = p;
-
-	while(snake->next != NULL){
-		x = snake->next->x;
-		y = snake->next->y;
-		
-		if(map[x][y] ==0){
-			map[x][y] = 'o';
-		}
-		snake = snake->next;
-	}
+void draw(char map[ROW+1][LINE+1]){
+	int i,j;
 
 	for(i=0;i<ROW+1;i++){
 		for(j=0;j<LINE+1;j++){
@@ -227,7 +215,7 @@ void move(char map[ROW+1][LINE+1],struct Snake *p){
 	head = get_head(snake);
 
 	while(1){
-		printf("input direct:");
+		printf("input direct:\n");
 		x = head->x;
 		y = head->y;
 		head_direct = head->direct;
@@ -256,13 +244,13 @@ void move(char map[ROW+1][LINE+1],struct Snake *p){
 		}
 
 		if(bite_self(map,head) || hit_wall(map,head)){
-			printf("game over!");
+			printf("game over!\n");
 			return;
 		}
 
 		head->direct = direct;
 		m = new_snake(map,snake,head);
-		draw(map,m);
+		draw(map);
 		head = get_head(m);
 	}
 }
@@ -290,7 +278,7 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 		snake->next->next = NULL;
 		
 		map[x][y] = 'o';
-		create_food(map,p);
+		create_food(map);
 	}else{
 		x = snake->next->x;
 		y = snake->next->y;
@@ -324,17 +312,19 @@ struct Snake *new_snake(char map[ROW+1][LINE+1],struct Snake *p,struct Snake *h)
 
 
 int main(){
-	struct Snake *snake,*food;
+	struct Snake *snake;
 	char map[ROW+1][LINE+1];
 	int i,j;
 
 	memset(map,0,sizeof(map)); 
 	init_map(map);
 	snake = init_snake(map);
-	create_food(map,snake);
+	create_food(map);
 
-	draw(map,snake);
+	draw(map);
 
 	move(map,snake);
 
+	free(snake);
+	return 0;
 }
