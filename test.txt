@@ -1,3 +1,6 @@
 测试 git tag v0.1 历史提交版本 之后
 git branch -b branch_v0.1
 再修改 branch_0.1 融合到master
+
+测试merge后的效果
+
